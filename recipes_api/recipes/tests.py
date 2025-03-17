@@ -8,7 +8,7 @@ class RecipeAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.recipe = Recipe.objects.create(title="Spaghetti Bolognese")
+        self.recipe = Recipe.objects.create(title="Spaghetti")
         
         self.ingredient_1 = Ingredient.objects.create(
             name="Ground Beef", 
@@ -33,7 +33,7 @@ class RecipeAPITests(TestCase):
     def test_update_ingredient_amounts_based_on_servings(self):
         servings = 2
 
-        url = f'/api/recipes/{self.recipe.id}/ingredients/{servings}/'
+        url = f'/api/recipes/{self.recipe.title}/ingredients/?servings={servings}'
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -49,7 +49,7 @@ class RecipeAPITests(TestCase):
     def test_ingredient_conversion_to_ounces(self):
         
         servings = 1
-        url = f'/api/recipes/{self.recipe.id}/ingredients/{servings}/ounces/' 
+        url = f'/api/recipes/{self.recipe.title}/ingredients/ounces/?servings={servings}'
         response = self.client.get(url)
         
         for ingredient in response.data:
