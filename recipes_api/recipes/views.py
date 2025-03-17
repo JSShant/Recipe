@@ -37,7 +37,8 @@ def get_recipe_ingredients(request, title):
     return Response(adjusted_ingredients)
 
 @api_view(['GET'])
-def convert_units(request, title, servings=1, target_unit=None):
+def convert_units(request, title, target_unit=None):
+    servings = int(request.query_params.get('servings', 1))
     try:
         recipe = Recipe.objects.get(title=title)
     except Recipe.DoesNotExist:
