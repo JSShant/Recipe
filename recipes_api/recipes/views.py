@@ -18,9 +18,10 @@ def get_all_recipes(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def get_recipe_ingredients(request, recipe_id, servings=1):
+def get_recipe_ingredients(request, title):
+    servings = int(request.query_params.get('servings', 1))
     try:
-        recipe = Recipe.objects.get(id=recipe_id)
+        recipe = Recipe.objects.get(title=title)
     except Recipe.DoesNotExist:
         return Response({"error": "Recipe not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -36,9 +37,9 @@ def get_recipe_ingredients(request, recipe_id, servings=1):
     return Response(adjusted_ingredients)
 
 @api_view(['GET'])
-def convert_units(request, recipe_id, servings=1, target_unit=None):
+def convert_units(request, title, servings=1, target_unit=None):
     try:
-        recipe = Recipe.objects.get(id=recipe_id)
+        recipe = Recipe.objects.get(title=title)
     except Recipe.DoesNotExist:
         return Response({"error": "Recipe not found"}, status=status.HTTP_404_NOT_FOUND)
 
